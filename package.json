@@ -9,9 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@fs/zion-icon": "^10.0.0",
-    "@fs/zion-image-viewer": "^3.0.2",
-    "@fs/zion-ui": "^14.1.1",
     "@supabase/supabase-js": "^2.87.2",
     "i18next": "^24.2.3",
     "prop-types": "^15.8.1",
