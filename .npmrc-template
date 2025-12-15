@@ -1,0 +1,5 @@
+@fs:registry=https://familysearch.jfrog.io/artifactory/api/npm/fs-npm-prod-virtual/
+//familysearch.jfrog.io/artifactory/api/npm/fs-npm-prod-virtual/:_password="${NPM_JFROG_PASSWORD}"
+//familysearch.jfrog.io/artifactory/api/npm/fs-npm-prod-virtual/:username=haylee.mcarthur@familysearch.org
+//familysearch.jfrog.io/artifactory/api/npm/fs-npm-prod-virtual/:email=haylee.mcarthur@familysearch.org
+//familysearch.jfrog.io/artifactory/api/npm/fs-npm-prod-virtual/:always-auth=true
