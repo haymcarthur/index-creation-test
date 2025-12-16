@@ -64,6 +64,12 @@ export function InstructionPanel({
   const handleNextQuestion = () => {
     const step = currentStep;
 
+    // Check if recording is still active before allowing any action
+    if (!isRecording || recordingStopped) {
+      alert('Recording is not active. Please restart the recording before continuing.');
+      return;
+    }
+
     // Validate current question
     const newErrors = {};
     if (step === 2 && responses.taskSuccess === null) {
@@ -136,11 +142,22 @@ export function InstructionPanel({
           <p style={{ marginBottom: spacing.xs }}>
             Thank you for participating in this study. We're testing a new feature for creating indexes in historical records.
           </p>
-          <p style={{ marginBottom: spacing.xs }}>
-            <strong>Before we begin, you must enable screen and audio recording.</strong>
-          </p>
-          <p style={{ marginBottom: spacing.xs, color: colors.gray.gray60 }}>
-            Your recording will help us understand how you interact with the interface. All data will be kept confidential and used only for research purposes.
+          <div style={{
+            padding: spacing.sm,
+            marginBottom: spacing.sm,
+            backgroundColor: colors.blue.blue00,
+            border: `2px solid ${colors.blue.blue60}`,
+            borderRadius: '4px'
+          }}>
+            <p style={{ marginBottom: spacing.xs, fontWeight: 600, fontSize: '15px' }}>
+              ⚠️ Screen Recording Required
+            </p>
+            <p style={{ marginBottom: 0, fontSize: '14px', color: colors.gray.gray70 }}>
+              You must enable screen and audio recording to participate. Click the button below to grant permission.
+            </p>
+          </div>
+          <p style={{ marginBottom: spacing.xs, fontSize: '14px', color: colors.gray.gray60 }}>
+            Your recording helps us understand how you interact with the interface. All data will be kept confidential and used only for research purposes.
           </p>
           {recordingError && (
             <div style={{
@@ -526,7 +543,7 @@ export function InstructionPanel({
             )}
 
             {/* Action buttons */}
-            {currentStep === 1 && !recordingStopped && (
+            {currentStep === 1 && (
               <div style={{
                 padding: spacing.md,
                 paddingBottom: 0,
@@ -534,12 +551,28 @@ export function InstructionPanel({
                 flexDirection: 'column',
                 gap: spacing.xs
               }}>
+                {(!isRecording || recordingStopped) && (
+                  <div style={{
+                    padding: spacing.xs,
+                    marginBottom: spacing.xs,
+                    backgroundColor: colors.yellow.yellow00,
+                    border: `2px solid ${colors.yellow.yellow60}`,
+                    borderRadius: '4px',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    color: colors.gray.gray70,
+                    textAlign: 'center'
+                  }}>
+                    {recordingStopped ? '⚠️ Recording stopped - Please restart to continue' : '⚠️ Please enable recording to begin'}
+                  </div>
+                )}
                 <Button
                   variant="blue"
                   emphasis="medium"
                   size="lg"
                   fullWidth
                   onClick={handleStartTask}
+                  disabled={!isRecording || recordingStopped}
                 >
                   {hasStartedTask ? 'Continue Task' : 'Get Started'}
                 </Button>
@@ -549,6 +582,7 @@ export function InstructionPanel({
                   size="lg"
                   fullWidth
                   onClick={handleStartQuestions}
+                  disabled={!isRecording || recordingStopped}
                 >
                   I'm Done
                 </Button>
@@ -564,13 +598,28 @@ export function InstructionPanel({
                 flexDirection: 'column',
                 gap: spacing.xs
               }}>
+                {(!isRecording || recordingStopped) && (
+                  <div style={{
+                    padding: spacing.xs,
+                    marginBottom: spacing.xs,
+                    backgroundColor: colors.red.red00,
+                    border: `2px solid ${colors.red.red60}`,
+                    borderRadius: '4px',
+                    fontSize: '13px',
+                    fontWeight: 600,
+                    color: colors.red.red70,
+                    textAlign: 'center'
+                  }}>
+                    ⚠️ Recording stopped - Go back to restart recording
+                  </div>
+                )}
                 <Button
                   variant="blue"
                   emphasis="high"
                   size="lg"
                   fullWidth
                   onClick={handleNextQuestion}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !isRecording || recordingStopped}
                 >
                   {isSubmitting ? (
                     <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: spacing.xs }}>
