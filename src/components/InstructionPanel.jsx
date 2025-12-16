@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from "../../ux-zion-library/src/components/Button";
 import { spacing } from "../../ux-zion-library/src/tokens/spacing";
 import { colors } from "../../ux-zion-library/src/tokens/colors";
+import { useTestSession } from '../contexts/TestSessionContext';
 
 /**
  * Instruction panel component for user testing
@@ -20,6 +21,7 @@ export function InstructionPanel({
   startRecording,
   recordingStopped
 }) {
+  const { isSubmitting } = useTestSession();
   const [currentStep, setCurrentStep] = useState(0);
   const [isOpen, setIsOpen] = useState(true);
   const [recordingAttempted, setRecordingAttempted] = useState(false);
@@ -193,6 +195,9 @@ export function InstructionPanel({
         <div>
           <p style={{ marginBottom: spacing.sm }}>
             <strong>Task:</strong> Add <strong>Gary Fadden</strong> and <strong>Ronald Fadden</strong> to <strong>Edgar Fadden's household</strong>.
+          </p>
+          <p style={{ marginBottom: spacing.sm, fontSize: '14px', color: colors.gray.gray70 }}>
+            Make sure to include <strong>all details</strong> found on the document for each person (name, relationship, age, birth information, etc.).
           </p>
           <p style={{ marginBottom: spacing.sm, fontSize: '14px', color: colors.gray.gray60 }}>
             <strong>Tip:</strong> You can reopen this panel at any time by clicking the tab on the left side.
@@ -565,8 +570,23 @@ export function InstructionPanel({
                   size="lg"
                   fullWidth
                   onClick={handleNextQuestion}
+                  disabled={isSubmitting}
                 >
-                  {currentStep === 5 ? 'Submit Feedback' : 'Next'}
+                  {isSubmitting ? (
+                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: spacing.xs }}>
+                      <span style={{
+                        width: '16px',
+                        height: '16px',
+                        border: '2px solid white',
+                        borderTopColor: 'transparent',
+                        borderRadius: '50%',
+                        animation: 'spin 0.8s linear infinite'
+                      }} />
+                      Submitting...
+                    </span>
+                  ) : (
+                    currentStep === 5 ? 'Submit Feedback' : 'Next'
+                  )}
                 </Button>
               </div>
             )}
@@ -599,7 +619,7 @@ export function InstructionPanel({
         </div>
       )}
 
-      {/* Add pulse animation */}
+      {/* Add animations */}
       <style>{`
         @keyframes pulse {
           0%, 100% {
@@ -607,6 +627,14 @@ export function InstructionPanel({
           }
           50% {
             opacity: 0.5;
+          }
+        }
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
           }
         }
       `}</style>
